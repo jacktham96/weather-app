@@ -1,12 +1,12 @@
-import { useState } from 'react'
+import React from 'react'
 import './index.css'
+import CurrentWeather from './components/CurrentWeather'
 
 function App() {
 
   return (
-    <div>
-      <h1>HellO World</h1>
-      https://codesandbox.io/s/github/IgnacioCastro0713/react-weather-app?file=/src/styles.css:301-380
+    <div className='weather-container h-screen w-full flex justify-center items-center'>
+      <CurrentWeather/>
     </div>
   )
 
