@@ -1,12 +1,12 @@
 import React from 'react'
 import './index.css'
-import CurrentWeather from './components/CurrentWeather'
+import Weather from './components/Weather'
 
 function App() {
 
   return (
-    <div className='weather-container h-screen w-full flex justify-center items-center'>
-      <CurrentWeather/>
+    <div className='flex justify-center pt-8'>
+      <Weather />
     </div>
   )
 

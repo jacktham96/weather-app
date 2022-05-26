@@ -19,8 +19,6 @@ html,
 body {
   font-family: 'Poppins', sans-serif;
   @apply h-screen; 
-}
-
-.weather-container {
   background: #e2e8f0;
+
 }

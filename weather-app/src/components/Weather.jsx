@@ -1,5 +1,9 @@
 import React, {useEffect,useState} from 'react'
-import { apiKey } from '../environment'
+import { apiKey , algoliaApiKey ,appID } from '../environment' 
+import AlgoliaPlaces from 'algolia-places-react';  //https://www.npmjs.com/package/algolia-places-react
+import CurrentWeather from './CurrentWeather'
+
+
 
 const Weather = () => {
     let [error , setError] = useState(false)
@@ -8,12 +12,12 @@ const Weather = () => {
 		feels_like: '-1',
 		description: 'snowing',
 		icon: '50d',
-		name: 'Tala, MX',
-		lat: 20.67,
-		lon: -103.7
+		name: 'Taipei, TW',
+		lat: 25.03,
+		lon: 121.56
     })
 
-    let [url, setUrl] = useState(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}`)
+    let [url, setUrl] = useState(`https://api.openweathermap.org/data/2.5/weather?lat=${currentWeather.lat}&lon=${currentWeather.lon}&appid=${apiKey}&units=metric`)
     
     useEffect(()=>{
         const getWeather = async() =>{
@@ -42,8 +46,25 @@ const Weather = () => {
 
 
   return (
-    <div>
-        <currentWeather/>
+    <div className='weather-container mt-32'>
+        <div className='searchbar'>
+            <AlgoliaPlaces
+                placeholder='Write an address here'
+                onChange = {({suggestion}) => 
+                setUrl(`https://api.openweathermap.org/data/2.5/weather?lat=${suggestion.latlng.lat}&lon=${suggestion.latlng.lng}&appid=${apiKey}&units=metric`)
+                }
+
+                options={{
+                    appID,
+                    apiKey: algoliaApiKey,
+                    aroundLatLngViaIP: false // disable the extra search/boost around the source IP
+                  }}
+
+            />
+        </div>
+        <div className='currentweather mt-16'>
+            <CurrentWeather weather={currentWeather}/>
+        </div>
     </div>
   )
 }
