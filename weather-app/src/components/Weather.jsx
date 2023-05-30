@@ -1,8 +1,7 @@
 import React, {useEffect,useState} from 'react'
 import { apiKey , algoliaApiKey ,appID } from '../environment' 
-import AlgoliaPlaces from 'algolia-places-react';  //https://www.npmjs.com/package/algolia-places-react
 import CurrentWeather from './CurrentWeather'
-
+import Search from './Search';
 
 
 const Weather = () => {
@@ -45,25 +44,33 @@ const Weather = () => {
     }, [url])
 
 
+    const handleonSearchChange = (searchData) => {
+        const [lat, lon] = searchData.value.split("")
+        const currentWeatherFetch = fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`)
+        console.log(searchData);
+
+        Promise.all([currentWeatherFetch])
+            .then(async(response)=>{
+                const weatherResponse = await response[0].json()
+
+                setCurrentWeather({city: searchData.label, ...weatherResponse})
+            })
+            .catch((error)=>console.log(error))
+    }
+
   return (
     <div className='weather-container mt-32'>
-        <div className='searchbar'>
-            <AlgoliaPlaces
-                placeholder='Write an address here'
-                onChange = {({suggestion}) => 
-                setUrl(`https://api.openweathermap.org/data/2.5/weather?lat=${suggestion.latlng.lat}&lon=${suggestion.latlng.lng}&appid=${apiKey}&units=metric`)
-                }
 
-                options={{
-                    appID,
-                    apiKey: algoliaApiKey,
-                    aroundLatLngViaIP: false // disable the extra search/boost around the source IP
-                  }}
-
+        <div className='searchbar2'>
+            <Search 
+                onSearchChange = {handleonSearchChange}
             />
         </div>
+
+
+
         <div className='currentweather mt-16'>
-            <CurrentWeather weather={currentWeather}/>
+            {currentWeather && <CurrentWeather weather={currentWeather}/>}
         </div>
     </div>
   )
